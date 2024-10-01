@@ -1,0 +1,92 @@
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100) NOT NULL,
+    Email VARCHAR(255) UNIQUE NOT NULL,
+    DateOfBirth DATE,
+    EnrollmentDate DATE DEFAULT CURRENT_DATE
+);
+
+
+CREATE TABLE Courses (
+    CourseID INT PRIMARY KEY AUTO_INCREMENT,
+    CourseName VARCHAR(255) NOT NULL,
+    Credits INT NOT NULL
+);
+
+
+CREATE TABLE Enrollments (
+    EnrollmentID INT PRIMARY KEY AUTO_INCREMENT,
+    StudentID INT,
+    CourseID INT,
+    Grade DECIMAL(3, 2),
+    FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);
+
+
+INSERT INTO Students (FirstName, LastName, Email, DateOfBirth) VALUES
+('Alice', 'Johnson', 'alice@example.com', '2000-01-15'),
+('Bob', 'Smith', 'bob@example.com', '1999-03-22'),
+('Charlie', 'Brown', 'charlie@example.com', '2001-05-30');
+
+
+INSERT INTO Courses (CourseName, Credits) VALUES
+('Mathematics', 3),
+('Physics', 4),
+('Chemistry', 3);
+
+INSERT INTO Courses (CourseName, Credits) VALUES
+('Mathematics', 3),
+('Physics', 4),
+('Chemistry', 3);
+
+
+
+INSERT INTO Enrollments (StudentID, CourseID, Grade) VALUES
+(1, 1, 3.5),  -- Alice enrolled in Mathematics
+(1, 2, 3.0),  -- Alice enrolled in Physics
+(2, 1, 4.0),  -- Bob enrolled in Mathematics
+(3, 3, 3.7);  -- Charlie enrolled in Chemistry
+
+
+UPDATE Students
+SET Email = 'alice.j@example.com'
+WHERE StudentID = 1;  -- Update Alice's email
+
+
+UPDATE Courses
+SET Credits = 5
+WHERE CourseID = 2;  -- Update Physics credits
+
+
+DELETE FROM Enrollments
+WHERE EnrollmentID = 1;  -- Delete the first enrollment record
+
+
+DELETE FROM Courses
+WHERE CourseID = 3;  -- Delete Chemistry course
+
+
+SELECT * FROM Students;
+
+
+SELECT * FROM Courses;
+
+SELECT * FROM Enrollments;
+
+SELECT s.FirstName, s.LastName, c.CourseName, e.Grade
+FROM Enrollments e
+JOIN Students s ON e.StudentID = s.StudentID
+JOIN Courses c ON e.CourseID = c.CourseID;
+
+SELECT c.CourseName, AVG(e.Grade) AS AverageGrade
+FROM Enrollments e
+JOIN Courses c ON e.CourseID = c.CourseID
+GROUP BY c.CourseName;
+
+
+
+
+
+
